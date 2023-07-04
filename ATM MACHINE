@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+
+class ATM {
+private:
+    int balance;
+    int pinCode;
+    int success;
+
+public:
+    ATM(int bal, int pin) {
+        balance = bal;
+        pinCode = pin;
+    }
+
+    int getBalance() {
+        return balance;
+    }
+
+    bool withdraw(int amount, int pin) {
+        if (pin != pinCode) {
+            return false;
+        }
+        if (amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+
+    void deposit(int amount) {
+        balance += amount;
+    }
+
+    bool transfer(int amount, ATM & receiver, int pin) {
+        if (pin != pinCode) {
+            return false;
+        }
+        success = withdraw(amount, pin);
+        if (success) {
+            receiver.deposit(amount);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+};
+
+int main() {
+    ATM atm(5000, 1234);
+    int choice, amount, success, pin;
+    char op;
+    cout<<"Wellcome to STATE BANK OF INDIA ATM "<<endl;
+
+    do {
+        system("cls");
+        
+        cout << "1. Balance Enquiry" << endl;
+        cout << "2. Withdraw Amount" << endl;
+        cout << "3. Deposit Amount" << endl;
+        cout << "4. Transfer Amount" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter Your Choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Your Account Balance is : " << atm.getBalance() << endl;
+            break;
+        case 2:
+            cout << "Your Available Balance: " << atm.getBalance() << endl;
+            cout << "Enter the Amount to Withdraw: ";
+            
+            success = atm.withdraw(amount,  pin);
+            cin >> amount;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            success = atm.transfer(amount, atm, pin);
+            if (success) {
+                cout << "Withdraw Successful..." << endl;
+            }
+            else {
+                cout << "Insufficient Balance or Invalid PIN..." << endl;
+            }
+            
+            break;
+        case 3:
+            cout << "Enter the Amount to Deposit: ";
+            cin >> amount;
+            atm.deposit(amount);
+            cout << "Deposit Successful..." << endl;
+            break;
+        case 4:
+            cout << "Your Available Balance: " << atm.getBalance() << endl;
+            cout << "Enter the Amount to Transfer: ";
+            cin >> amount;
+            cout << "Enter PIN: ";
+            cin >> pin;
+            success = atm.transfer(amount, atm, pin);
+            if (success) {
+                cout << "Transfer Successful..." << endl;
+            }
+            else {
+                cout << "Insufficient Balance or Invalid PIN..." << endl;
+            }
+            break;
+        case 5:
+            cout << "Thanks for using \"State Bank Of India\" ATM" << endl;
+            cout << "Visit Again"<<endl;
+            exit(1);
+            break;
+        default:
+            cout << "Invalid Choice" << endl;
+        }
+    } while (true);
+
+    return 0;
+}
